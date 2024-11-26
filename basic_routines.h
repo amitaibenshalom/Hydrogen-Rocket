@@ -56,7 +56,7 @@ void ignite() {
    delay(DELAY_BETWEEN_VALVE_AND_SPARK);  // wait
    reset_charge();
    digitalWrite(SPARK_IO, HIGH);  // ignite - turn on spark
-   delay(100);
+   delay(SPARK_TIME);
    digitalWrite(SPARK_IO, LOW);  // turn off spark
    delay(DELAY_AFTER_SPARK);  // wait
    digitalWrite(HYDROGEN_VALVE_IO, LOW);  // open valve
@@ -67,10 +67,7 @@ bool check_charge() {
   /*
    * check is charge is between limits
    */
-   if (charge < MIN_CHARGE)
-     return false;
-
-   return true;
+   return charge >= MIN_CHARGE;
 }
 
 #endif
