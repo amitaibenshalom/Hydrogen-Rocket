@@ -29,7 +29,7 @@
 #define IGNITION_BUTTON_IO 2
 #define SPARK_IO 4
 #define HYDROGEN_VALVE_IO 5
-// #define LANG_BUTTON_IO 7
+#define LANG_BUTTON_IO 7
 
 
 bool use_serial = true;  // not relevant now
@@ -66,6 +66,7 @@ float current_value = 0;        // calculated current [A]
 float avg_current_value = 0;        // calculated average current [A]
 float abs_avg_current_value = 0;        // absolute average current [A]
 uint8_t lang = 0;  // 0 - hebrew, 1 - english, 2 - arabic
+bool last_lang_button_state = HIGH;  // used for checking if lang button was released
 bool ignited_now = false;  // for serial msg
 
 

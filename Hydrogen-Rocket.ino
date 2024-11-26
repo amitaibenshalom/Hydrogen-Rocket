@@ -14,7 +14,7 @@ void setup() {
   pinMode(SPARK_IO, OUTPUT);
   pinMode(HYDROGEN_VALVE_IO, OUTPUT);
   pinMode(CURRENT_INPUT_IO, INPUT);
-  // pinMode(LANG_BUTTON_IO, INPUT_PULLUP);
+  pinMode(LANG_BUTTON_IO, INPUT_PULLUP);
   
   //start_display();  // initialize display
   Serial.begin(BAUDRATE);  // initialize serial communications 
@@ -36,6 +36,10 @@ void loop() {
     delay(BOUNCE_TIME);  // wait antibounce time to make sure button release 
     ignite();
     ignited_now = true;
+  }
+
+  if (check_lang_button()) {  // pressed on language button
+    lang = lang >= 2 ? 0 : (lang + 1);  // toggle language
   }
   
   if (millis() - last_measure_time >= MEASURE_INTERVAL_TIME) {
