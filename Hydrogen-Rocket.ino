@@ -16,11 +16,10 @@ void setup() {
   pinMode(CURRENT_INPUT_IO, INPUT);
   pinMode(LANG_BUTTON_IO, INPUT_PULLUP);
   
-  //start_display();  // initialize display
   Serial.begin(BAUDRATE);  // initialize serial communications 
   delay (100);  // wait to make sure serial begin
 
-  start_display();  // initialize display
+//  start_display();  // initialize display
 
   // Serial.println(F(__FILE__ " " __DATE__ " " __TIME__));
   // Serial.println("START");
@@ -28,9 +27,17 @@ void setup() {
   last_measure_time = millis();  // reset measure timer 
   last_display_time = millis();  // reset display timer 
   fill_initial_rolling_average_value();  // fill initial rolling average vector
+
+  // ignite on start to clear charge
+  ignite();
 }
 
 void loop() {
+
+  if (charge >= AUTO_EXPLOSION_THRESHOLD) {
+    ignite();
+    ignited_now = true;
+  }
 
   if (check_ignition_button() && check_charge()) {  // button pressed
     delay(BOUNCE_TIME);  // wait antibounce time to make sure button release 
@@ -67,7 +74,7 @@ void loop() {
      text = MAX_CHARGE_TEXT;
     }
     
-    display_all();  // dispaly all data 
+//    display_all();  // dispaly all data 
     Serial.println(String(abs_avg_current_value) + " " + String(charge) + " " + ignited_now + " " + lang);
     last_display_time = millis(); //reset timer
 

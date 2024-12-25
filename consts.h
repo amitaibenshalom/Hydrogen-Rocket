@@ -31,8 +31,7 @@
 #define HYDROGEN_VALVE_IO 5
 #define LANG_BUTTON_IO A1
 
-
-bool use_serial = true;  // not relevant now
+const float AUTO_EXPLOSION_THRESHOLD = 90; // absolute max charge for auto explosion
 
 const float MIN_CHARGE = 20;// Coulomb, minimum charge enable ignition  
 const float MAX_CHARGE = 40;// Coulomb, maximum charge have to ignite
@@ -48,7 +47,7 @@ const int16_t DELAY_AFTER_SPARK = 500; // ms - delay after spark before opening 
 const int16_t SPARK_TIME = 150; // ms - Spark time !!! keep as short as possible to avoid HV driver damage
 
 // display consts
-const int32_t DISPLAY_INTERVAL_TIME = 500;  // ms show/display interval
+const int32_t DISPLAY_INTERVAL_TIME = 200;  // ms show/display interval
 char* DISPLAY_TEXTS[] = {"low", "ok", "max"};
 
 #define LOW_CHARGE_TEXT 0
