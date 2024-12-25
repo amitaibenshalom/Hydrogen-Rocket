@@ -22,14 +22,16 @@
  *                      --USB--        
  */
 
-//#define CURRENT_INPUT_IO A0 // current densor 
- #define CURRENT_INPUT_IO A6 // simulation potentiometer
+#define CURRENT_INPUT_IO A0 // current densor 
+// #define CURRENT_INPUT_IO A6 // simulation potentiometer
 
 #define BAUDRATE (115200)
-#define IGNITION_BUTTON_IO A2
+//#define IGNITION_BUTTON_IO A2
+#define IGNITION_BUTTON_IO 2
 #define SPARK_IO 4
 #define HYDROGEN_VALVE_IO 5
-#define LANG_BUTTON_IO A1
+//#define LANG_BUTTON_IO A1
+#define LANG_BUTTON_IO 3
 
 const float AUTO_EXPLOSION_THRESHOLD = 90; // absolute max charge for auto explosion
 
