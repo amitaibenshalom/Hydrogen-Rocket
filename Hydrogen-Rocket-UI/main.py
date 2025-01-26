@@ -15,8 +15,8 @@ def main():
     screen = pygame.display.set_mode(VIEW_PORT)
 
     language = HEBREW
-    charge = 0
-    current = 0
+    charge = 0.0
+    current = 0.0
     state = OPENING
 
     while True:
@@ -33,19 +33,15 @@ def main():
                     
                 if event.key == pygame.K_UP:
                     charge = min(charge + 1, MAX_CHARGE)
-                    print(f"charge: {charge}")
 
                 if event.key == pygame.K_DOWN:
                     charge = max(charge - 1, MIN_CHARGE)
-                    print(f"charge: {charge}")
 
                 if event.key == pygame.K_LEFT:
                     current = max(current - 0.2, MIN_CURRENT)
-                    print(f"current: {current}")
 
                 if event.key == pygame.K_RIGHT:
                     current = min(current + 0.2, MAX_CURRENT)
-                    print(f"current: {current}")
 
                 if event.key == pygame.K_RETURN:
                     state = (state + 1) % len(STATES)  # toggle state from OPENING to MEASURE

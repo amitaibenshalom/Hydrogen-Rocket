@@ -34,6 +34,8 @@ MEASURE_HEB = os.path.join(PICTURES, "main_heb.png")
 MEASURE_ENG = os.path.join(PICTURES, "main_eng.png")
 MEASURE_ARB = os.path.join(PICTURES, "main_arb.png")
 BAR_EMPTY = os.path.join(PICTURES, "bar_empty.png")
+BAR_FULL = os.path.join(PICTURES, "bar_full.png")
+NIDDLE = os.path.join(PICTURES, "niddle.png")
 GAUGE = os.path.join(PICTURES, "gauge.png")
 
 # load the pictures
@@ -44,7 +46,8 @@ measure_heb = pygame.image.load(MEASURE_HEB)
 measure_eng = pygame.image.load(MEASURE_ENG)
 measure_arb = pygame.image.load(MEASURE_ARB)
 bar_empty = pygame.image.load(BAR_EMPTY)
-niddle = pygame.image.load(os.path.join(PICTURES, "niddle.png"))
+bar_full = pygame.image.load(BAR_FULL)
+niddle = pygame.image.load(NIDDLE)
 gauge = pygame.image.load(GAUGE)
 
 # transform the pictures to the screen resolution
@@ -55,9 +58,24 @@ measure_heb = pygame.transform.scale(measure_heb, VIEW_PORT)
 measure_eng = pygame.transform.scale(measure_eng, VIEW_PORT)
 measure_arb = pygame.transform.scale(measure_arb, VIEW_PORT)
 bar_empty = pygame.transform.scale(bar_empty, VIEW_PORT)
+bar_full = pygame.transform.scale(bar_full, VIEW_PORT)
 gauge = pygame.transform.scale(gauge, VIEW_PORT)
 # niddle is a little tricky:
 niddle = pygame.transform.scale(niddle, (int(niddle.get_size()[0] * VIEW_PORT[0] / 1080),
                                          int(niddle.get_size()[1] * VIEW_PORT[1] / 1920)))
 
-NIDDLE_DISPLACEMENT = (0.5 * VIEW_PORT[0], 0.43 * VIEW_PORT[1])  # the position of the niddle on the screen
+# positions
+NIDDLE_POS = (int(0.5 * VIEW_PORT[0]), int(0.43 * VIEW_PORT[1]))  # the position of the niddle on the screen
+CURRENT_TEXT_POS = (int(0.5 * VIEW_PORT[0]), int(0.487 * VIEW_PORT[1]))  # the position of the current text on the screen
+CHARGE_TEXT_POS = (int(0.51 * VIEW_PORT[0]), int(0.92 * VIEW_PORT[1]))  # the position of the charge text on the screen
+BAR_GRAPH_BOTTOM_HEIGHT = int(0.875 * VIEW_PORT[1])  # the bottom of the bar graph
+
+# colors
+BLACK = (0, 0, 0)
+CURRENT_TEXT_COLOR = BLACK
+CHARGE_TEXT_COLOR = BLACK
+
+# sizes
+CURRENT_TEXT_SIZE = int(50 * VIEW_PORT[0] / 1080)
+CHARGE_TEXT_SIZE = int(80 * VIEW_PORT[0] / 1080)
+BAR_SIZE = (int(146 * VIEW_PORT[0] / 1080), int(522 * VIEW_PORT[1] / 1920))
