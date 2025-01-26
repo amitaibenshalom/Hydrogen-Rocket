@@ -5,6 +5,7 @@ Purpose: Main file for the Hydrogen Rocket UI
 import pygame
 from consts import *
 from display import *
+from arduino import *
 
 
 def main():
@@ -12,12 +13,15 @@ def main():
     The main function for the Hydrogen Rocket UI
     """
     pygame.display.set_caption("Hydrogen Rocket")
-    screen = pygame.display.set_mode(VIEW_PORT)
+    screen = pygame.display.set_mode(VIEW_PORT, pygame.FULLSCREEN)
 
     language = HEBREW
     charge = 0.0
     current = 0.0
     state = OPENING
+
+    arduino_port = find_arduino_port()  # find the serial port
+    ser = open_serial_connection(arduino_port)  # Open the serial port
 
     while True:
 
@@ -46,10 +50,27 @@ def main():
                 if event.key == pygame.K_RETURN:
                     state = (state + 1) % len(STATES)  # toggle state from OPENING to MEASURE
         
-        screen.fill((0,0,0))
-        display_state(screen, state=state, language=language, charge=charge, current=current)
+        state = MEASURE if current >= SWITCH_TO_MEASURE_SCREEN_CURRENT_THRESHOLD else OPENING
 
+        data_from_arduino = read_line(ser)  # read from arduino
+        if data_from_arduino == SERIAL_ERROR:  # if arduino WAS connected at start, but now failed to read:
+            print("Disconnecting from Arduino...")
+            print("Going to default settings...")
+            ser = None
+            language = HEBREW
+            charge = 0.0
+            current = 0.0
+            state = OPENING
+
+        if data_from_arduino and data_from_arduino != SERIAL_ERROR:  # if data is vaild
+            # print(data_from_arduino)
+            current, charge, has_ignited, language = parse_data(data_from_arduino)
+            # print(f"parsed: current {current} charge {charge} has_ignited {has_ignited} language {language}")
+
+        screen.fill((0,0,0))  # reset screen
+        display_state(screen, state=state, language=language, charge=charge, current=current)  # render the screen
         pygame.display.flip()
         
 
-main()
+if __name__ == "__main__":
+    main()

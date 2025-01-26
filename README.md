@@ -1,3 +1,3 @@
 # Hydrogen-Rocket
-Hydrogen Rocket exhibit in the Jerusalem Science Museum - Arduino code
+Hydrogen Rocket exhibit in the Jerusalem Science Museum - Arduino code and UI
  

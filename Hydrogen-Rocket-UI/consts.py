@@ -1,30 +1,38 @@
 import os
 import pygame
 
+USE_FULL_SCREEN = True
 
+# arduino
+BAUDRATE = 115200
+FORCE_ARDUINO = False  # run the program ONLY if you find arduino successfully - otherwise quit.
+TRY_AGAIN_ARDUINO = True  # try again if arduino is 
+SERIAL_ERROR = -1
+
+# languages
 HEBREW = 0
 ENGLISH = 1
 ARABIC = 2
 LANGUAGES = [HEBREW, ENGLISH, ARABIC]
 
+#states
 OPENING = 0
 MEASURE = 1
 STATES = [OPENING, MEASURE]
 
-
+# charge and current values
 MIN_CHARGE = 0.0
 MAX_CHARGE = 120.0
-
 MIN_CURRENT = 0.0
 MAX_CURRENT = 8.0
+SWITCH_TO_MEASURE_SCREEN_CURRENT_THRESHOLD = 1
 
 
 # pictures
-
 pygame.init()
 VIEW_PORT = pygame.display.Info().current_w, pygame.display.Info().current_h  # get the screen resolution
-VIEW_PORT = (607.5, 1080)
-# VIEW_PORT = (1080, 1920)
+# VIEW_PORT = (607.5, 1080)  # for testing
+# VIEW_PORT = (1080, 1920)  # for testing
 
 PICTURES = os.path.join(os.path.dirname(__file__), "pictures")  # get the path of the pictures folder
 OPEN_HEB = os.path.join(PICTURES, "open_heb.png")
