@@ -14,6 +14,7 @@ def main():
     """
     pygame.display.set_caption("Hydrogen Rocket")
     screen = pygame.display.set_mode(VIEW_PORT, pygame.FULLSCREEN)
+    clock = pygame.time.Clock()  # for fps limit
 
     language = HEBREW
     charge = 0.0
@@ -50,7 +51,6 @@ def main():
                 if event.key == pygame.K_RETURN:
                     state = (state + 1) % len(STATES)  # toggle state from OPENING to MEASURE
         
-        state = MEASURE if current >= SWITCH_TO_MEASURE_SCREEN_CURRENT_THRESHOLD else OPENING
 
         data_from_arduino = read_line(ser)  # read from arduino
         if data_from_arduino == SERIAL_ERROR:  # if arduino WAS connected at start, but now failed to read:
@@ -67,10 +67,13 @@ def main():
             current, charge, has_ignited, language = parse_data(data_from_arduino)
             # print(f"parsed: current {current} charge {charge} has_ignited {has_ignited} language {language}")
 
+            state = MEASURE if current >= SWITCH_TO_MEASURE_SCREEN_CURRENT_THRESHOLD else OPENING  # if you got data, change the screen automatically based on the current value
+
+
         screen.fill((0,0,0))  # reset screen
         display_state(screen, state=state, language=language, charge=charge, current=current)  # render the screen
         pygame.display.flip()
-        
+        clock.tick(100)
 
 if __name__ == "__main__":
     main()
