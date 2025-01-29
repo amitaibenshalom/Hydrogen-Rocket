@@ -23,11 +23,10 @@ def find_arduino_port():
     if FORCE_ARDUINO:
         sys.exit(1)  # quit if USE_ARDUINO flag is on (must use arduino, but couldn't connect to it)
 
-    print("Continuing without Arduino...")
     return None  # continue without Arduino (if USE_ARDUINO is false)
 
 
-def open_serial_connection(port=None, baud_rate=BAUDRATE):
+def open_serial_connection(port=None, baud_rate=BAUDRATE, timeout=1):
     """
     Open a serial connection to the specified port.
     """
@@ -35,7 +34,7 @@ def open_serial_connection(port=None, baud_rate=BAUDRATE):
         return None
 
     try:
-        ser = serial.Serial(port, baud_rate, timeout=1)
+        ser = serial.Serial(port, baud_rate, timeout=timeout)
         print(f"Connected to {port}")
         return ser
     

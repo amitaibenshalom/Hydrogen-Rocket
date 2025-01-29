@@ -6,6 +6,7 @@ import pygame
 from consts import *
 from display import *
 from arduino import *
+import time
 
 
 def main():
@@ -23,6 +24,7 @@ def main():
 
     arduino_port = find_arduino_port()  # find the serial port
     ser = open_serial_connection(arduino_port)  # Open the serial port
+    last_time_tried_to_connect = time.time()  # for not trying to connect too often
 
     while True:
 
@@ -54,13 +56,19 @@ def main():
 
         data_from_arduino = read_line(ser)  # read from arduino
         if data_from_arduino == SERIAL_ERROR:  # if arduino WAS connected at start, but now failed to read:
-            print("Disconnecting from Arduino...")
-            print("Going to default settings...")
+            print("Disconnecting from Arduino... Going to default settings")
             ser = None
             language = HEBREW
             charge = 0.0
             current = 0.0
             state = OPENING
+
+        # if arduino was connecetd at start, but now failed to read, try to reconnect
+        if not ser and time.time() - last_time_tried_to_connect > RECONNECT_INTERVAL:
+            arduino_port = find_arduino_port()  # find the serial port
+            ser = open_serial_connection(arduino_port)  # Open the serial port
+            last_time_tried_to_connect = time.time()  # update the last time tried to connect
+
 
         if data_from_arduino and data_from_arduino != SERIAL_ERROR:  # if data is vaild
             # print(data_from_arduino)

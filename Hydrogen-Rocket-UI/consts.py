@@ -6,8 +6,8 @@ USE_FULL_SCREEN = True
 # arduino
 BAUDRATE = 115200
 FORCE_ARDUINO = False  # run the program ONLY if you find arduino successfully - otherwise quit.
-TRY_AGAIN_ARDUINO = True  # try again if arduino is 
 SERIAL_ERROR = -1
+RECONNECT_INTERVAL = 1  # seconds
 
 # languages
 HEBREW = 0
@@ -25,7 +25,7 @@ MIN_CHARGE = 0.0
 MAX_CHARGE = 120.0
 MIN_CURRENT = 0.0
 MAX_CURRENT = 8.0
-SWITCH_TO_MEASURE_SCREEN_CURRENT_THRESHOLD = 1
+SWITCH_TO_MEASURE_SCREEN_CURRENT_THRESHOLD = 1  # above this current value, the screen will switch to the measure screen
 
 
 # pictures
