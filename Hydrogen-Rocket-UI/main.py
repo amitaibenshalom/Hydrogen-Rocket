@@ -3,27 +3,35 @@ File: main.py
 Purpose: Main file for the Hydrogen Rocket UI
 """
 import pygame
+import time
 from consts import *
 from display import *
 from arduino import *
-import time
+from logs import *
 
 
 def main():
     """
     The main function for the Hydrogen Rocket UI
     """
+    # pygame setup
     pygame.display.set_caption("Hydrogen Rocket")
     screen = pygame.display.set_mode(VIEW_PORT, pygame.FULLSCREEN)
     clock = pygame.time.Clock()  # for fps limit
 
+    # initial values for the UI
     language = HEBREW
     charge = 0.0
     current = 0.0
     state = OPENING
 
-    arduino_port = find_arduino_port()  # find the serial port
-    ser = open_serial_connection(arduino_port)  # Open the serial port
+    # logging setup - log into a file called log.txt in the folder /logs with the format: [TIME] - [MESSAGE], if the file exists, append to it, if not, create it, if it exceeds 1MB, create a new file with a number suffix (before the .txt) and continue logging to it (e.g., log1.txt, log2.txt, etc.)
+    logger = get_logger()
+    logger.info("Starting Hydrogen Rocket UI")
+
+    # arduino setup
+    arduino_port = find_arduino_port(logger=logger)  # find the serial port
+    ser = open_serial_connection(arduino_port, logger=logger)  # Open the serial port
     last_time_tried_to_connect = time.time()  # for not trying to connect too often
 
     while True:
@@ -54,9 +62,13 @@ def main():
                     state = (state + 1) % len(STATES)  # toggle state from OPENING to MEASURE
         
 
-        data_from_arduino = read_line(ser)  # read from arduino
+        data_from_arduino = read_line(ser, logger=logger)  # try to read from arduino
         if data_from_arduino == SERIAL_ERROR:  # if arduino WAS connected at start, but now failed to read:
-            print("Disconnecting from Arduino... Going to default settings")
+            print("Arduino disconnected! Going to default settings")
+            print("Trying to reconnect to Arduino...")
+            logger.info("Arduino disconnected... Going to default settings")
+            logger.info("Trying to reconnect to Arduino...")
+
             ser = None
             language = HEBREW
             charge = 0.0
@@ -65,15 +77,19 @@ def main():
 
         # if arduino was connecetd at start, but now failed to read, try to reconnect
         if not ser and time.time() - last_time_tried_to_connect > RECONNECT_INTERVAL:
-            arduino_port = find_arduino_port()  # find the serial port
-            ser = open_serial_connection(arduino_port)  # Open the serial port
+            arduino_port = find_arduino_port(logger=logger)  # find the serial port
+            ser = open_serial_connection(arduino_port, logger=logger)  # Open the serial port
             last_time_tried_to_connect = time.time()  # update the last time tried to connect
 
 
         if data_from_arduino and data_from_arduino != SERIAL_ERROR:  # if data is vaild
             # print(data_from_arduino)
-            current, charge, has_ignited, language = parse_data(data_from_arduino)
+            current, charge, has_ignited, language = parse_data(data_from_arduino, logger=logger)
             # print(f"parsed: current {current} charge {charge} has_ignited {has_ignited} language {language}")
+            
+            if has_ignited:
+                logger.info(f"Rocket has ignited!")
+                print("Rocket has ignited!")
 
             state = MEASURE if current >= SWITCH_TO_MEASURE_SCREEN_CURRENT_THRESHOLD else OPENING  # if you got data, change the screen automatically based on the current value
 
@@ -81,7 +97,7 @@ def main():
         screen.fill((0,0,0))  # reset screen
         display_state(screen, state=state, language=language, charge=charge, current=current)  # render the screen
         pygame.display.flip()
-        clock.tick(100)
+        clock.tick(FPS)
 
 if __name__ == "__main__":
     main()

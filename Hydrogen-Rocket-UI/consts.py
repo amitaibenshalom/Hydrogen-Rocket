@@ -1,11 +1,14 @@
+"""
+Filename: consts.py
+Purpose: Constants for the Hydrogen Rocket UI
+"""
 import os
 import pygame
 
-USE_FULL_SCREEN = True
+FPS = 100
 
 # arduino
 BAUDRATE = 115200
-FORCE_ARDUINO = False  # run the program ONLY if you find arduino successfully - otherwise quit.
 SERIAL_ERROR = -1
 RECONNECT_INTERVAL = 1  # seconds
 
@@ -27,6 +30,10 @@ MIN_CURRENT = 0.0
 MAX_CURRENT = 8.0
 SWITCH_TO_MEASURE_SCREEN_CURRENT_THRESHOLD = 1  # above this current value, the screen will switch to the measure screen
 
+# logging values
+LOG_FOLDER = os.path.join(os.path.dirname(__file__), "logs")  # get the path of the logs folder
+MAX_SIZE_PER_LOG_FILE = 1 * 1024 * 1024  # 1MB
+BACKUP_COUNT = 10  # max number of log files, if all 10 are full, the first one will be deleted, rotating the rest 
 
 # pictures
 pygame.init()
